@@ -12,8 +12,8 @@ const App = () => {
     return (
         <Layout>
             <Switch>
-                <Route path="/" component={List} />
-                <Route path="/" component={Edit} />
+                <Route exact path="/" component={List} />
+                <Route path="/edit" component={Edit} />
             </Switch>
         </Layout>
     );

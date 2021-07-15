@@ -1,6 +1,7 @@
 // libraries
 import React, { useCallback, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Link } from 'react-router-dom';
 // api
 import { getPosts } from 'api/posts';
 // styles
@@ -46,10 +47,13 @@ const List = () => {
                         >
                             <button type="button">Copy</button>
                         </CopyToClipboard>
-                      <button type="button" onClick={() => removeItem(item.Cur_ID)}>Del</button>
+                        {/* <button type="button" onClick={() => removeItem(item.Cur_ID)}>Del</button>*/}
                     </li>
                 ))}
             </ol>
+            <Link to={"/edit"}>
+                <button type="button">EDIT</button>
+            </Link>
         </div>
     );
 };
