@@ -1,24 +1,26 @@
-// libraries
+// libraries 
 import React, { useCallback, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-// api
+// api 
 import { getCurrency } from 'api/currency';
-// styles
+// styles 
 import './list.scss';
+
+const mappedCurrency = {
+    USD: 'USD',
+    EUR: 'EUR'
+};
 
 const List = () => {
     const path = useLocation();
     const isEditPage = path.pathname === '/edit';
     const [items, setItems] = useState([]);
     const [isSending, setIsSending] = useState(false);
+    const [inputValue, setInputValue] = useState('');
     const sliceDateStart = 0;
     const sliceDateEnd = 10;
-    const currency = ['USD','EUR'];
-
-    currency.map(elem => elem);
-    //const CurAbbreviation = ;
 
     const fetchCurrency = useCallback(
         async () => {
@@ -34,8 +36,10 @@ const List = () => {
     );
 
     useEffect(() => {
+        localStorage.getItem('inputValue', mappedCurrency);
+        console.log(mappedCurrency);
         fetchCurrency();
-    }, [fetchCurrency, isSending]);
+    }, [fetchCurrency, isSending, mappedCurrency]);
 
     const removeItem = Cur_ID => {
         setItems(items.filter(item => item.Cur_ID !== Cur_ID));
@@ -43,28 +47,52 @@ const List = () => {
 
     return (
         <div className="currencyWrapper">
-            <button type="button" onClick={() => setIsSending(!isSending)}>Update the list</button>
+            <button type="button" className="butUpdate" onClick={() => setIsSending(!isSending)}>Update the list</button>
             <ol>
-                {items.filter(elem =>  elem).map(elem => (
-                    <li key={elem.Cur_ID}>
-                        <div className="currencyConteiner"><span>{[...elem.Date].slice(sliceDateStart, sliceDateEnd)}</span> <span>{elem.Cur_Abbreviation}</span>
-                            <span>{elem.Cur_OfficialRate}</span>
-                        </div>
-                        <CopyToClipboard
-                            text={[[...elem.Date].slice(sliceDateStart, sliceDateEnd).join(''), elem.Cur_Abbreviation, elem.Cur_OfficialRate].join(' ')}
+                {items.filter(elem => elem.Cur_Abbreviation === mappedCurrency[elem.Cur_Abbreviation])
+                    .map(elem => (
+                        <li key={elem.Cur_ID}>
+                            <div className="currencyConteiner">
+                                <span className="dataStyle">{[...elem.Date].slice(sliceDateStart, sliceDateEnd)}</span>
+                                <span className="abbreviationStyle">{elem.Cur_Abbreviation}</span>
+                                <span className="officialRateStyle">{elem.Cur_OfficialRate}</span>
+                            </div>
+                            <CopyToClipboard
+                                text={[[...elem.Date].slice(sliceDateStart, sliceDateEnd).join(''), elem.Cur_Abbreviation, elem.Cur_OfficialRate].join(' ')}
+                            >
+                                <button type="button" className="butCopy itemButtonStyle">Copy</button>
+                            </CopyToClipboard>
+                            {isEditPage && <button type="button" className="butDel itemButtonStyle" onClick={() => removeItem(elem.Cur_ID)}>X</button>}
+                        </li>
+                    ))}
+                {isEditPage && (<input
+                    list="browsers"
+                    name="browser"
+                    id="browser"
+                    value={inputValue}
+                    onChange={e => setInputValue(e.target.value)}
+                                />)}
+                <datalist id="browsers" >
+                    {items.map(elem => (
+                        <option
+                            key={elem.Cur_ID}
+                            value={elem.Cur_Abbreviation}
                         >
-                            <button type="button">Copy</button>
-                        </CopyToClipboard>
-                        {isEditPage && <button type="button" onClick={() => removeItem(elem.Cur_ID)}>X</button>}
-                    </li>
-                ))}
-                {isEditPage && <button type="button">Add currency</button>}
+                        </option>
+                    ))};
+                </datalist>
+                {isEditPage && <button type="button" className="butUpdate" onClick={() => mappedCurrency[inputValue] = inputValue}>Add currency</button>}
             </ol>
             <Link to="/edit">
-                {!isEditPage && <button type="button">EDIT</button>}
+                {!isEditPage && <button className="butUpdate" type="button">EDIT</button>}
             </Link>
             <Link to="/">
-                {isEditPage &&<button type="button">Save and exit</button>}
+                {isEditPage &&(<button
+                    className="butUpdate"
+                    type="button"
+                    onClick={() => localStorage.setItem('inputValue', mappedCurrency)}
+                >Save and exit
+                </button>)}
             </Link>
         </div>
     );

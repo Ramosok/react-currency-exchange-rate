@@ -1,13 +1,68 @@
-.post-link {
-    display: block;
-    margin: 5px 0;
-    text-decoration: underline;
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: 600;
+.currencyWrapper {
+  margin: 0 auto;
+  max-width: 400px;
 }
-.currencyConteiner{
 
-    float: left;
+.currencyConteiner {
+  float: left;
+}
+
+.itemButtonStyle {
+  float: right;
+}
+
+.dataStyle, .abbreviationStyle, .officialRateStyle {
+  margin-right: 15px;
+}
+
+.butCopy {
+  padding: 1px;
+  background-color: gold;
+  border-radius: 20%;
+}
+
+.butDel {
+  background-color: red;
+  border-radius: 50%;
+}
+
+.butUpdate {
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+  position: relative;
+  padding: 5px 15px;
+  border: 1px solid;
+  border-image: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+  border-image-slice: 1;
+  margin: 10px 20px;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  overflow: hidden;
+  letter-spacing: 2px;
+  transition: .8s cubic-bezier(.165, .84, .44, 1);
+}
+
+.butUpdate:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+  width: 100%;
+  z-index: -1;
+  color: white;
+  background: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+  transition: .8s cubic-bezier(.165, .84, .44, 1);
+}
+
+.butUpdate:hover {
+  background: rgba(255, 255, 255, 0);
+}
+
+.butUpdate:hover:before {
+  bottom: 0%;
+  top: auto;
+  height: 100%;
 }
 

@@ -8,7 +8,7 @@ const Header = () => {
     return (
         <header className="header">
             <div className="container">
-                <Link to="/">Posts Application</Link>
+                <Link to="/">HEADER</Link>
             </div>
         </header>
     );
