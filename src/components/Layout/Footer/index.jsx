@@ -3,7 +3,7 @@ import React from 'react';
 // components
 
 // styles
-import './footer.css';
+import './footer.scss';
 
 const Footer = () => {
     return (

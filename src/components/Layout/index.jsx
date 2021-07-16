@@ -4,14 +4,14 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 // styles
-import './layout.css';
+import './layout.scss';
 
 const Layout = ({ children }) => {
     return (
         <>
-            <div className="content">
+            <div className="wrapper">
                 <Header />
-                <div className="content-container container">
+                <div className="children-container container">
                     {children}
                 </div>
             </div>

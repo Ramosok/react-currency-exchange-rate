@@ -2,20 +2,28 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 // api
-import { getPosts } from 'api/posts';
+import { getCurrency } from 'api/currency';
 // styles
-import './list.css';
+import './list.scss';
 
 const List = () => {
+    const path = useLocation();
+    const isEditPage = path.pathname === '/edit';
     const [items, setItems] = useState([]);
     const [isSending, setIsSending] = useState(false);
+    const sliceDateStart = 0;
+    const sliceDateEnd = 10;
+    const currency = ['USD','EUR'];
 
+    currency.map(elem => elem);
+    //const CurAbbreviation = ;
 
-    const fetchPosts = useCallback(
+    const fetchCurrency = useCallback(
         async () => {
             try {
-                const data = await getPosts() || [];
+                const data = await getCurrency() || [];
 
                 setItems(data);
             } catch (e) {
@@ -26,33 +34,37 @@ const List = () => {
     );
 
     useEffect(() => {
-        fetchPosts();
-    }, [fetchPosts, isSending]);
+        fetchCurrency();
+    }, [fetchCurrency, isSending]);
 
     const removeItem = Cur_ID => {
         setItems(items.filter(item => item.Cur_ID !== Cur_ID));
     };
 
     return (
-        <div>
+        <div className="currencyWrapper">
             <button type="button" onClick={() => setIsSending(!isSending)}>Update the list</button>
             <ol>
-                {items.filter(item => item.Cur_Scale === 1).map(item => (
-                    <li key={item.Cur_ID}>
-                        <div><span>{[...item.Date].slice(0, 10)}</span> <span>{item.Cur_Abbreviation}</span>
-                            <span>{item.Cur_OfficialRate}</span>
+                {items.filter(elem =>  elem).map(elem => (
+                    <li key={elem.Cur_ID}>
+                        <div className="currencyConteiner"><span>{[...elem.Date].slice(sliceDateStart, sliceDateEnd)}</span> <span>{elem.Cur_Abbreviation}</span>
+                            <span>{elem.Cur_OfficialRate}</span>
                         </div>
                         <CopyToClipboard
-                            text={[[...item.Date].slice(0, 10).join(''), item.Cur_Abbreviation, item.Cur_OfficialRate].join(' ')}
+                            text={[[...elem.Date].slice(sliceDateStart, sliceDateEnd).join(''), elem.Cur_Abbreviation, elem.Cur_OfficialRate].join(' ')}
                         >
                             <button type="button">Copy</button>
                         </CopyToClipboard>
-                        {/* <button type="button" onClick={() => removeItem(item.Cur_ID)}>Del</button>*/}
+                        {isEditPage && <button type="button" onClick={() => removeItem(elem.Cur_ID)}>X</button>}
                     </li>
                 ))}
+                {isEditPage && <button type="button">Add currency</button>}
             </ol>
-            <Link to={"/edit"}>
-                <button type="button">EDIT</button>
+            <Link to="/edit">
+                {!isEditPage && <button type="button">EDIT</button>}
+            </Link>
+            <Link to="/">
+                {isEditPage &&<button type="button">Save and exit</button>}
             </Link>
         </div>
     );

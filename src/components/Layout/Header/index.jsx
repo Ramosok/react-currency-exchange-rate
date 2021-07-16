@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 // styles
-import './header.css';
+import './header.scss';
 
 const Header = () => {
     return (
